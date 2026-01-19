@@ -48,8 +48,18 @@ class VectorDatabase:
         return self.vectors.get(key, None)
 
     async def abuild_from_list(self, list_of_text: List[str]) -> "VectorDatabase":
-        embeddings = await self.embedding_model.async_get_embeddings(list_of_text)
-        for text, embedding in zip(list_of_text, embeddings):
+        # Filter out empty or whitespace-only strings (OpenAI API rejects them)
+        # Also skip any non-string items
+        filtered_texts = [
+            text for text in list_of_text 
+            if isinstance(text, str) and text.strip()
+        ]
+        
+        if not filtered_texts:
+            raise ValueError("No valid text documents to embed (all were empty, whitespace, or non-string)")
+        
+        embeddings = await self.embedding_model.async_get_embeddings(filtered_texts)
+        for text, embedding in zip(filtered_texts, embeddings):
             self.insert(text, np.array(embedding))
         return self
 
