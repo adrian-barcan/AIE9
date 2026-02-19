@@ -29,7 +29,7 @@ The Certification Challenge invites you to take a step towards them.
 
 It's time to put your skills to the test!
 
-# Setting Expectations
+## Setting Expectations
 
 During Cohort 8, here is how the numbers shook out. It took an average of 26.2 hours for people to complete the challenge. This is up slightly from 23.2 hours on average in Cohort 7.
 
@@ -49,7 +49,7 @@ Whatever it is, it will start with the first question of The Certification Chall
 
 Of course, you've already answered this!
 
-# Your Project Idea
+## Your Project Idea
 
 Earlier in the cohort, we asked you to submit a project idea using a framework like this: Problem, Solution, Audience. 
 
@@ -73,7 +73,7 @@ The best AI engineers can do both.
 
 Once you know the problem to be solved, you must be capable of guiding your team towards implementation.
 
-## Task 1: Articulate the problem and the user of your application
+### Task 1: Articulate the problem and the user of your application
 
 **You are an AI Solutions Engineer**.
 
@@ -90,7 +90,7 @@ Once you know the problem to be solved, you must be capable of guiding your team
 2. Write 1-2 paragraphs on why this is a problem for your specific user
 3. Create a list of questions or input-output pairs that you can use to evaluate your application
 
-# Task 2:** Articulate your proposed solution**
+### Task 2:** Articulate your proposed solution**
 
 Now that you’ve defined a problem and a user, *there are many possible solution implementations.*
 
@@ -116,7 +116,7 @@ Choose one, and articulate it.
     10. Any other components you need
 3. What are the RAG and agent components of your project, exactly?
 
-## Task 3: Collect your own data (RAG) and choose at least one external API to use (Agent)
+### Task 3: Collect your own data (RAG) and choose at least one external API to use (Agent)
 
 **You are an AI Systems Engineer.**  The AI Solutions Engineer has handed off the plan to you. *At a minimum*, you’ll need to implement a simple Agentic RAG solution that includes two aspects:
 
@@ -132,7 +132,7 @@ Choose one, and articulate it.
 1. Describe the default chunking strategy that you will use for your data.  Why did you make this decision?
 2. Describe your data source and the external API you plan to use, as well as what role they will play in your solution. Discuss how they interact during usage. 
 
-## Task 4: Build an end-to-end Agentic RAG application using a production-grade stack and your choice of commercial off-the-shelf model(s)
+### Task 4: Build an end-to-end Agentic RAG application using a production-grade stack and your choice of commercial off-the-shelf model(s)
 
 **✅ Deliverables**
 
@@ -140,7 +140,7 @@ Choose one, and articulate it.
 2. (Optional) Use locally-hosted OSS models instead of LLMs through the OpenAI API
 3. (Optional) Deploy your prototype to public endpoint using a tool like [Vercel](http://vercel.com/), [Render](https://render.com/), or [FastAPI Cloud](https://fastapicloud.com/)
 
-## Task 5: Prepare a test data set (either by generating synthetic data or by assembling an existing dataset) to baseline an initial evaluation with RAGAS
+### Task 5: Prepare a test data set (either by generating synthetic data or by assembling an existing dataset) to baseline an initial evaluation with RAGAS
 
 **You are an AI Evaluation & Performance Engineer.**  The AI Systems Engineer who built the initial RAG system has asked for your help and expertise in creating a "Golden Data Set" for evaluation.
 
@@ -149,7 +149,7 @@ Choose one, and articulate it.
 1. Assess your pipeline using the RAGAS framework, including the following key metrics: faithfulness, context precision, and context recall. Include any other metrics you feel are worthwhile to assess.   Provide a table of your output results.
 2. What conclusions can you draw about the performance and effectiveness of your pipeline with this information?
 
-## Task 6: Install an advanced retriever of your choosing in our Agentic RAG application
+### Task 6: Install an advanced retriever of your choosing in our Agentic RAG application
 
 **You are an AI Systems Engineer.**  The AI Evaluation and Performance Engineer has asked for your help in making stepwise improvements to the application. You will work together with them on this task.
 
@@ -159,7 +159,7 @@ Choose one, and articulate it.
 2. Implement the advanced retrieval technique on your application.
 3. How does the performance compare to your original RAG application?  Test the fine-tuned embedding model using the RAGAS frameworks to quantify any improvements.  Provide results in a table.
 
-## Task 7: Next Steps
+### Task 7: Next Steps
 
 You are the **AI Solutions Engineer** working with the **AI Evaluation & Performance Engineer**. 
 
