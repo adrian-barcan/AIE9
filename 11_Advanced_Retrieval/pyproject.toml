@@ -15,4 +15,10 @@ dependencies = [
     "qdrant-client>=1.13.2",
     "rank-bm25>=0.2.2",
     "langchain-qdrant>=0.2.0",
+    "pandas",
+    "datasets",
+    "ragas==0.2.10",
+    "tabulate",
+    "rapidfuzz>=3.0.0",
+    "nltk==3.8.1",
 ]
