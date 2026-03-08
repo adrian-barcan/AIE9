@@ -69,23 +69,36 @@ Have fun!
 What is the key architectural difference between the `simple_agent` and `agent_with_helpfulness` graphs? Specifically, explain how the helpfulness evaluation loop works and what mechanisms are in place to prevent it from running indefinitely.
 
 ##### Answer:
+So, the `simple_agent` is pretty straightforward: it just calls the LLM, runs any requested tools, and then stops. 
+The `agent_with_helpfulness` adds an extra checking step. Instead of stopping right away, it routes the LLM's final answer to an evaluator node (`helpfulness_node`). This node uses a smaller LLM model to double-check if the answer actually responds to the initial query! If it thinks the response isn't helpful, it sends it back to the main agent to try again, creating a loop.
 
-
+To prevent an infinite loop from happening if the agent gets stuck, the evaluator checks the conversation's length. If the `state["messages"]` list exceeds 10 messages, it returns a `HELPFULNESS:END` flag that immediately stops the graph!
 
 #### Question 2:
 What is the role of `langgraph.json` in the LangGraph Deployments? Describe each of its key fields and how the platform uses this file to discover and serve your graphs.
 
 ##### Answer:
+The `langgraph.json` file acts as the main configuration file for LangGraph Studio or the LangGraph API server. It tells the platform exactly how to set up the environment and where to find the graphs we built!
 
+Here are the key fields used in this file:
+- **`version`, `dependencies`, `env`, `python_version`**: These just define the setup details for the environment, dependencies, and where our variables are located (`.env`).
+- **`graphs`**: This dictionary tells LangGraph exactly where to find the compiled graph in our Python code. For example, `"simple_agent": "app.graphs.simple_agent:graph"` means "start looking at `app.graphs.simple_agent` and find the exported variable named `graph`".
+- **`assistants`**: This creates specific assistant instances from those graphs. It assigns an assistant ID (like `"agent_helpful"`) to a `graph_id`, allowing us to give it a human-readable `name` and `description`.
 
+The platform uses all of this to automatically build the API routes (`/assistants/...`) and the visual LangGraph Studio interface, knowing exactly what Python objects to execute when we send a request.
 
 #### Activity #1:
 Create your own agent graph! Build a new graph in `app/graphs/` with a custom evaluation node (e.g., a vibe checker, a fact verifier, a summarizer — get creative!). Register it in `langgraph.json`, serve it with `uv run langgraph dev`
 
 ##### Answer:
+I created a **"Toxicity Filter / Safe Agent"**!
 
-
-
+**How it works:**
+1. I created a new graph at `app/graphs/agent_with_toxicity_filter.py`. 
+2. The agent generates a response just like the `simple_agent`, but before returning it to the user, the response is routed to a custom `toxicity_node`. 
+3. This evaluation node uses `gpt-4o-mini` with structured output (`ToxicityResult(BaseModel)`) to explicitly check if the generated response contains any profanity, toxicity, or inappropriate content.
+4. **The Loop:** If it detects toxicity (`is_toxic=True`), instead of returning to the user, it intercepts the message and loops back to the main agent with a strict `SystemMessage` instructing it to rewrite the response politely. It will keep looping until the agent behaves (or until it hits the 10-message safety limit to prevent infinite loops).
+5. Finally, I registered it in `langgraph.json` under `graphs` as `agent_with_toxicity_filter` and created a new assistant ID for it called `agent_safe`.
 # Ship 🚢
 
 - The completed notebook.

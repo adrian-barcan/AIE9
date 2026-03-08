@@ -5,7 +5,8 @@
   "python_version": "3.13",
   "graphs": {
     "simple_agent": "app.graphs.simple_agent:graph",
-    "agent_with_helpfulness": "app.graphs.agent_with_helpfulness:graph"
+    "agent_with_helpfulness": "app.graphs.agent_with_helpfulness:graph",
+    "agent_with_toxicity_filter": "app.graphs.agent_with_toxicity_filter:graph"
   },
   "assistants": {
     "agent": {
@@ -17,6 +18,11 @@
       "graph_id": "agent_with_helpfulness",
       "name": "Agent with Helpfulness Check",
       "description": "Agent that uses tools and performs a helpfulness check with loop limit."
+    },
+    "agent_safe": {
+      "graph_id": "agent_with_toxicity_filter",
+      "name": "Safe Agent with Toxicity Filter",
+      "description": "Agent that uses tools and explicitly evaluates its own responses for toxicity and profanity before sending."
     }
   }
 }
