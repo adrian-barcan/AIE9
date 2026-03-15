@@ -99,6 +99,10 @@ Use RAGAS to evaluate your open-source Fireworks AI powered RAG app against an O
 
 Additionally, instrument both pipelines with **LangSmith** to capture token usage and cost per query. Use LangSmith's tracing and cost dashboards to compare the total cost of running each provider at scale. Include your evaluation results, cost breakdown, and analysis in your Loom video.
 
+**Summary:** The notebook loads a cat health guide PDF, builds two RAG pipelines (Fireworks AI vs OpenAI), runs 5 evaluation questions through both, scores them with RAGAS (context recall, faithfulness, factual correctness, answer relevancy), and uses LangSmith to compare token usage and cost per query.
+
+[`activity_1_evaluation.ipynb`](./activity_1_evaluation.ipynb)
+
 ## Advanced Activity: Local Models
 
 Swap out the Fireworks AI endpoints for **locally-running open-source models** using [Ollama](https://ollama.com/) or another local inference server of your choice. Run both your embedding model and your chat model locally, and rebuild the RAG pipeline on top of them.
