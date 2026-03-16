@@ -139,7 +139,19 @@ Why is OAuth important for MCP servers, and what security considerations should 
 
 #### ✅ Answer:
 
-_(insert your answer here)_
+OAuth is important for MCP servers because these servers expose powerful tools (like browsing products, managing carts, making purchases) that AI clients can call autonomously. Without proper authentication, anyone could access those tools and perform actions on behalf of users without their consent.
+
+OAuth solves this by ensuring that:
+1. **Only authorized clients** can connect to the server (the client must go through the OAuth flow to get a valid token).
+2. **Users explicitly grant permission** for what the AI client can do, so the agent can't just do whatever it wants.
+3. **Tokens are scoped and temporary**, limiting the blast radius if something goes wrong.
+
+Key security considerations:
+- **Always validate tokens server-side** - never trust the client blindly.
+- **Use HTTPS in production** so tokens aren't leaked in transit.
+- **Keep scopes narrow** - only grant the AI client the minimum permissions it actually needs (principle of least privilege).
+- **Handle token expiration and revocation** - tokens should expire, and you should be able to revoke them if a client is compromised.
+- **Be careful with sensitive operations** - tools that modify data or trigger purchases should have extra checks, because an AI agent might call them in ways a human wouldn't expect.
 
 ### ❓ Question #2:
 
@@ -147,11 +159,27 @@ What is the Agent-to-Agent (A2A) protocol, and how does it differ from MCP in te
 
 #### ✅ Answer:
 
-_(insert your answer here)_
+The **Agent-to-Agent (A2A) protocol** is an open standard (introduced by Google) that enables AI agents to communicate, discover each other's capabilities, and collaborate on tasks even if they're built with different frameworks or run on different platforms.
+
+**How it differs from MCP:**
+- **MCP** is about connecting an AI agent to **tools and data sources**. It standardizes how a single agent accesses external capabilities (APIs, databases, services). Think of it as giving an agent its "hands" to interact with the world.
+- **A2A** is about connecting **agents to other agents**. It standardizes how multiple agents discover each other, delegate tasks, and exchange results. Think of it as giving agents the ability to "talk to each other" and work as a team.
+
+In terms of architecture, MCP follows a **client-server model** (one agent calls tools on a server), while A2A is more **peer-to-peer**, agents publish "Agent Cards" describing what they can do, and other agents can discover and delegate tasks to them.
+
+**When to choose A2A over MCP:**
+- Use **MCP** when you need a single agent to access tools, APIs, or data sources.
+- Use **A2A** when you need multiple specialized agents to collaborate — for example, a "research agent" delegating a coding task to a "developer agent," or an orchestrator coordinating several domain-specific agents.
+
+They're actually complementary: an agent might use MCP to access its tools internally, while using A2A to communicate with other agents externally.
 
 ## Activity 1: Extend the MCP Server
 
 Add at least one new tool to the cat shop MCP server (e.g., `search_products`, `update_cart_quantity`, or `get_order_history`). Ensure the new tool integrates properly with the existing database and OAuth authentication. Demo the new tool through an MCP client and include it in your Loom video.
+
+**Implemented tools:**
+- `search_products`: Takes a `query` string and performs a case-insensitive search across product names and descriptions using SQL `LIKE`. Returns all matching products with their full details (id, name, description, price, category).
+- `update_cart_quantity`: Takes a `product_name` (partial match) and a `quantity` to update an item in the cart. Handles ambiguous matches, negative quantities, and setting quantity to 0 removes the item.
 
 ## Advanced Activity: Build a Custom MCP Client
 

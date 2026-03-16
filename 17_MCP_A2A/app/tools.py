@@ -36,6 +36,22 @@ async def list_products(category: str | None = None) -> list[dict]:
 
 
 @mcp.tool()
+async def search_products(query: str) -> list[dict]:
+    """Search for products by name or description. Returns all matching items."""
+    db = await oauth_provider._get_db()
+    cursor = await db.execute(
+        """SELECT id, name, description, price, category FROM products
+           WHERE name LIKE ? OR description LIKE ?""",
+        (f"%{query}%", f"%{query}%"),
+    )
+    rows = await cursor.fetchall()
+    return [
+        {"id": r[0], "name": r[1], "description": r[2], "price": r[3], "category": r[4]}
+        for r in rows
+    ]
+
+
+@mcp.tool()
 async def get_product(product_id: int) -> dict:
     """Get full details of a single product by its ID."""
     db = await oauth_provider._get_db()
@@ -116,6 +132,47 @@ async def remove_from_cart(product_id: int) -> dict:
     if cursor.rowcount == 0:
         return {"error": "Item not in cart"}
     return {"success": True, "message": "Item removed from cart"}
+
+
+@mcp.tool()
+async def update_cart_quantity(product_name: str, quantity: int) -> dict:
+    """Update the quantity of a product in your cart by name (partial match). Set to 0 to remove."""
+    username = await _get_username()
+    db = await oauth_provider._get_db()
+
+    cursor = await db.execute(
+        """SELECT c.product_id, p.name FROM cart_items c
+           JOIN products p ON c.product_id = p.id
+           WHERE c.username = ? AND p.name LIKE ?""",
+        (username, f"%{product_name}%"),
+    )
+    matches = await cursor.fetchall()
+
+    if not matches:
+        return {"error": f"No item matching '{product_name}' found in your cart"}
+    if len(matches) > 1:
+        names = [m[1] for m in matches]
+        return {"error": f"Multiple matches: {', '.join(names)}. Please be more specific."}
+
+    product_id, name = matches[0]
+
+    if quantity < 0:
+        return {"error": "Quantity cannot be negative"}
+
+    if quantity == 0:
+        await db.execute(
+            "DELETE FROM cart_items WHERE username = ? AND product_id = ?",
+            (username, product_id),
+        )
+        await db.commit()
+        return {"success": True, "message": f"Removed {name} from cart"}
+
+    await db.execute(
+        "UPDATE cart_items SET quantity = ? WHERE username = ? AND product_id = ?",
+        (quantity, username, product_id),
+    )
+    await db.commit()
+    return {"success": True, "message": f"Updated {name} quantity to {quantity}"}
 
 
 @mcp.tool()
